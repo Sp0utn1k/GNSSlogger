@@ -6,7 +6,6 @@
 Connection setup_connection(){
     HANDLE hComm;
 	
-	
 	BOOL Write_Status;
 	DCB dcbSerialParams;					// Initializing DCB structure
 	COMMTIMEOUTS timeouts = { 0 };

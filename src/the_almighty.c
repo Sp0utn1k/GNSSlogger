@@ -1,16 +1,17 @@
 #include<stdio.h>
 #include <string.h>
 #ifdef __unix__
-    #include "linux_connect.h"
+    
     #include <fcntl.h> // Contains file controls like O_RDWR
     #include <errno.h> // Error integer and strerror() function
     #include <termios.h> // Contains POSIX terminal control definitions
     #include <unistd.h> // write(), read(), close()
 
 #elif defined(_WIN32) || defined(WIN32)
-    #include"windows_connect.h"
+	#include<windows.h>
 
 #endif
+#include"connect.h"
 struct NAV_POSLLH {
 	unsigned char cls;
 	unsigned char id;
@@ -27,7 +28,7 @@ struct NAV_POSLLH {
 void print_hex(char msg[],int start,int len) {
 	int i;
 	for (i=start;i<len+start;i++) {
-		printf("0x%02hhx ", msg[i]);
+		printf("0x%02hx ", msg[i]);
 	}
 	printf("\n");
 }
