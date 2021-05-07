@@ -12,7 +12,7 @@
 
 #endif
 #include"connect.h"
-struct NAV_POSLLH {
+typedef struct NAV_POSLLH {
 	unsigned char cls;
 	unsigned char id;
 	unsigned short len;
@@ -23,7 +23,7 @@ struct NAV_POSLLH {
 	long hMSL;
 	unsigned long hAcc;
 	unsigned long vAcc;
-};
+} NAV_POSLLH;
 
 void print_hex(char msg[],int start,int len) {
 	int i;
