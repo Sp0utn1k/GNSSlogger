@@ -15,7 +15,7 @@
     }
      Connection setup_connection() {
         Connection connection;
-        unsigned char buf[34]= {181, 98, 1, 2, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        unsigned char buf[34]= {181, 98, 1, 2, 28, 0, 10, 97, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
        
         memcpy(&connection.mock_buffer[0],&buf[0],34 );
 
