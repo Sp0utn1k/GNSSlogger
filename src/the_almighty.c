@@ -1,5 +1,7 @@
 #include<stdio.h>
 #include <string.h>
+#define MOCK 1
+
 #ifdef __unix__
     
     #include <fcntl.h> // Contains file controls like O_RDWR
@@ -44,6 +46,7 @@ void char2posllh(char msg[], NAV_POSLLH* posllh, int len) {
 int main(){
 
     Connection connection = setup_connection();
+    
     NAV_POSLLH posllh;
 	char read_buf [1];
 	char msg[256];
@@ -57,23 +60,28 @@ int main(){
 	// }
 
 	int fpos = 0;
+	
+	read_n_bytes(&connection,&msg[0],2); // read header
 
-	read_n_bytes(connection,&msg[0],2); // read header
 	if (!(msg[0] == (char) 0xb5 && msg[1] == (char) 0x62)) {
 		printf("Wrong header\n");
 		print_hex(msg,0,2);
 		return 0;
 	}
-	read_n_bytes(connection,&msg[0],4);	
+	read_n_bytes(&connection,&msg[0],4);
+	print_hex(msg,0,4);
+	printf("%d",connection.position);
 	if (!(msg[0] == (char) 0x01 && msg[1] == (char) 0x02)) {
 		printf("Not posllh\n");
 		return 0;
 	}
 	char2posllh(msg,&posllh,4);
-	read_n_bytes(connection,&msg[4],posllh.len);
+	read_n_bytes(&connection,&msg[4],posllh.len);
 	printf("Payload : ");
+	
 
-	char2posllh(msg, &posllh,4+posllh.len);	
+	memcpy(&posllh,&msg[0],4+posllh.len);
+	//char2posllh(msg, &posllh,4+posllh.len);	
 	print_hex((char*) &posllh,0,4+posllh.len);
 
 	printf("Class : %d\n",posllh.cls);
