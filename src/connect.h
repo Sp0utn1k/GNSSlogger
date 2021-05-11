@@ -1,7 +1,12 @@
 #include<stdio.h>
 #include<string.h>
-
-#ifdef __unix__
+// #define MOCK 1
+#ifdef MOCK
+    typedef struct Connection{
+        unsigned char mock_buffer[34];
+        int position;    
+    } Connection;
+#elif defined(__unix__)
     #include <fcntl.h> // Contains file controls like O_RDWR
     #include <errno.h> // Error integer and strerror() function
     #include <termios.h> // Contains POSIX terminal control definitions
@@ -18,4 +23,4 @@
 
 Connection setup_connection();
 void close_connection(Connection connection);
-void read_n_bytes(Connection connection, char* msg,int n);
+void read_n_bytes(Connection* connection, char* msg,int n);

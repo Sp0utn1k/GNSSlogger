@@ -1,17 +1,39 @@
 #include<stdio.h>
 #include<string.h>
 #include"connect.h"
-#ifdef __unix__
+// #define MOCK 1
+#ifdef MOCK
+    void read_n_bytes(Connection* connection_ptr,char* msg,int n){
+        
+        memcpy(msg,&(connection_ptr->mock_buffer[connection_ptr->position]),n);
+        printf("%02hhx\n", *msg );
+        connection_ptr->position+= n;
+        
+    }
+    void close_connection(Connection connection){
+        
+    }
+     Connection setup_connection() {
+        Connection connection;
+        unsigned char buf[34]= {181, 98, 1, 2, 28, 0, 10, 97, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+       
+        memcpy(&connection.mock_buffer[0],&buf[0],34 );
+
+        connection.position=0;
+        return connection;
+     }
+
+#elif defined(__unix__)
     #include <fcntl.h> // Contains file controls like O_RDWR
     #include <errno.h> // Error integer and strerror() function
     #include <termios.h> // Contains POSIX terminal control definitions
     #include <unistd.h> // write(), read(), close()
 
-    void read_n_bytes(Connection connection,char* msg,int n) {
+    void read_n_bytes(Connection* connection,char* msg,int n) {
 
         char buf [1];
         for (int i=0;i<n;i++){
-            int n = read(connection.serial_port, buf, sizeof(buf));
+            int n = read(connection->serial_port, buf, sizeof(buf));
             *(msg+i) = buf[0];
         }
     }
@@ -153,9 +175,9 @@
 
         CloseHandle(connection.hComm);//Closing the Serial Port
     }
-    void read_n_bytes(Connection connection, char* msg,int n){
+    void read_n_bytes(Connection* connection, char* msg,int n){
         unsigned long received;
-        if(!ReadFile(connection.hComm, msg, n, &received, NULL))
+        if(!ReadFile(connection->hComm, msg, n, &received, NULL))
             printf("Error reading from serial port");
 
     }
