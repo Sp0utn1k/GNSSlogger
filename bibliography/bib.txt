@@ -1,0 +1,3 @@
+Reading serial in C on Linux : https://blog.mbedded.ninja/programming/operating-systems/linux/linux-serial-ports-using-c-cpp/
+Reading serial in C on windows :
+U-blox interface description : https://www.u-blox.com/sites/default/files/ZED-F9P_InterfaceDescription_%28UBX-18010854%29.pdf

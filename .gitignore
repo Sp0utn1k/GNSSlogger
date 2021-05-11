@@ -53,3 +53,5 @@ dkms.conf
 
 #ours
 .vscode/
+*.o
+*.exe
