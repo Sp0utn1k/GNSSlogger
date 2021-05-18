@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include <string.h>
+#include <stdbool.h>
 // #define MOCK 1
 
 #ifdef __unix__
@@ -28,16 +29,7 @@ typedef struct NAV_POSLLH {
 	unsigned long vAcc;
 } NAV_POSLLH;
 
-char cls;
-char id;
-int len;
-unsigned long TOW;
-long lon;
-long lat;
-long height;
-long hMSL;
-unsigned long hAcc;
-unsigned long vAcc;
+char checksum[2];
 
 const char HEADER[] = { 0xB5, 0x62 };
 
@@ -47,12 +39,6 @@ void print_hex(char msg[],int start,int len) {
 		printf("0x%02hhx ", msg[i]);
 	}
 	printf("\n");
-}
-
-void char2posllh(char msg[], NAV_POSLLH* posllh, int len) {
-	for (int i=0;i<len;i++) {
-		((unsigned char*)(posllh))[i] = msg[i];
-	}
 }
 
 unsigned long to_ulong(char bytes[],int start) {
@@ -80,6 +66,16 @@ unsigned short to_ushort(char bytes[],int start) {
 	return temp;
 }
 
+bool verify_checksum(char msg[],int len,char checksum[]) {
+	char CK_A = 0;
+	char CK_B = 0;
+		for (int i = 0; i < len; i++) {
+		CK_A = CK_A + msg[i];
+		CK_B = CK_B + CK_A;
+	}
+	return CK_A==checksum[0] && CK_B==checksum[1];
+}
+
 int main(){
 
     Connection connection = setup_connection();
@@ -96,42 +92,66 @@ int main(){
 	// 	msg[i] = read_buf[0];
 	// }
 
-	int fpos = 0;
+	int fpos;
 	
-	for (int i=0;i<10;i++) {
+	while (1) {
 
+		fpos = 0;
 		while (fpos<2) {
 			read_n_bytes(&connection,&msg[fpos],1); // read header
 			if (msg[fpos] == HEADER[fpos]) {
 				fpos++;
 			}
+			else {
+				// printf("Wrong header at pos : %d\n",fpos);
+				fpos = 0;
+			}
 		}
-		read_n_bytes(&connection,&msg[0],2);
+		read_n_bytes(&connection,&msg[0],1);
+		memcpy(&posllh.cls,&msg[0],1);
 
-		if (!(msg[0] == (char) 0x01 && msg[1] == (char) 0x02)) {
-			printf("Not posllh\n");
+		if (posllh.cls != (char) 0x01) {
+			printf("Wrong class, excpecting posllh\n");
+			continue;
+		}
+
+		read_n_bytes(&connection,&msg[1],1);
+		memcpy(&posllh.id,&msg[1],1);
+
+		if (posllh.id != (char) 0x02) {
+			printf("Wrong id, excpecting posllh\n");
 			continue;
 		}
 
 		read_n_bytes(&connection,&msg[2],2);
-		cls = msg[0];
-		id = msg[1];
-		len = (int) to_ushort(msg,2);
-		// printf("length : %d\n",len);
+		memcpy(&posllh.len,&msg[2],2);
 
-		read_n_bytes(&connection,&msg[4],len);
+		read_n_bytes(&connection,&msg[4],posllh.len);
+		read_n_bytes(&connection,&msg[posllh.len+4],2);
 		// printf("Payload : ");
 		// print_hex(msg,0,4+len);
 
-		TOW = to_ulong(msg,4);
-		lon = to_long(msg,8);
+		memcpy(&posllh.iTOW,&msg[4],4);
+		memcpy(&posllh.lon,&msg[8],4);
+		memcpy(&posllh.lat,&msg[12],4);
+		memcpy(&posllh.height,&msg[16],4);
+		memcpy(&posllh.hMSL,&msg[20],4);
+		memcpy(&posllh.hAcc,&msg[24],4);
+		memcpy(&posllh.vAcc,&msg[28],4);
+		memcpy(&checksum,&msg[32],2);
+
+		int length = posllh.len+4;
+
+		if (!verify_checksum(msg,length,checksum)) {
+			printf("Bad ckecsum \n");
+			continue;
+		}
 		
-		// printf("Class : %d\n",cls);
-		// printf("ID : %d\n",id);
-		// printf("length : %d\n",len);
-		printf("TOW : %lu\n",TOW);
-		// printf("Longitutde: %ld\n",lon);
-		fpos = 0;
+		printf("length : %d\n",posllh.len);
+		printf("TOW : %lu\n",posllh.iTOW);
+		printf("Longitutde: %ld\n",posllh.lon);
+		printf("Latitude: %ld\n",posllh.lat);
+		printf("\n");
 	}
     close_connection(connection);
     return 1;
