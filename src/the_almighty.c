@@ -2,6 +2,8 @@
 #include <string.h>
 #include <stdbool.h>
 #include<stdlib.h>
+#include <time.h>
+
 // #define MOCK 1
 
 #ifdef __unix__
@@ -41,27 +43,22 @@ void display_ubx(char msg[],int len) {
 
 void save_ubx(char msg[],int len,FILE * fp) {
 	for (int i=0;i<len;i++) {
-		fprintf(fp,"%02hhx ",msg[i]);
-		if ((i+1) % 16 == 0 && i < len-1) {
-			fprintf(fp,"\n");
-		}
+		fprintf(fp,"%c",msg[i]);
 	}
-	fprintf(fp,"\n\n");
 }
-
-
-
 
 int main(int argc, char *argv[]){
 
 	char checksum[2];
 	char port[20] = "ttyACM0"; // Default serial port
-	char outputfile[256] = "output.txt";
+	char outputfile[256] = "output.ubx";
 	char msg[256];
 	int fpos = 0;
 	unsigned short len;
 	bool to_txt = false;
 	bool erase = false;
+	unsigned long measure_time = 10;
+	time_t time_buf;
 
 	char config_message[256];
 	memset(config_message,0,256);
@@ -90,6 +87,13 @@ int main(int argc, char *argv[]){
 				erase = true;
 			}else if (strcmp(argv[i],"-h")==0) {
 				display_help();
+			}
+			else if (strcmp(argv[i],"-t")==0) {
+				if (argc == i+1 || argv[i+1][0] == '-') {
+					printf("No output filename specified after -o. Default : %ld\n",measure_time);
+				}else {
+					measure_time = atoi(argv[i+1]);
+				}
 			}else{
 				memset(&field,0,sizeof(field));
 				if(get_field(argv[i],&field)){
@@ -99,14 +103,15 @@ int main(int argc, char *argv[]){
 					
 					config_len+=len;
 					//print_hex(config_message,0,config_len);
+				}else {
+					printf("Error : option %s does not exist\n",argv[i]);
+					return 0;
 				}
 
 				
 			}
 		}
 	}
-
-	exit(1);
 
 	FILE * fp;
 	if (to_txt) {
@@ -121,12 +126,15 @@ int main(int argc, char *argv[]){
 	    else {
 	    	fp = fopen(outputfile, "a");
 	    }
+	    // fprintf(fp, "\n========= START OF MEASURE =========\n");
 	}
+
 	
 
     Connection connection = setup_connection(port);
 	memset(msg,0,sizeof(msg));
-	while (1) {
+	time_buf = time(NULL);
+	while (time(NULL)-time_buf < measure_time) {
 		while (fpos<2) {
 			read_n_bytes(&connection,&msg[fpos],1);
 			if (msg[fpos] == HEADER[fpos]) {
@@ -153,7 +161,11 @@ int main(int argc, char *argv[]){
 		}
 		fpos = 0;
 	}
+
     close_connection(connection);
-    fclose(fp);
+    // fprintf(fp, "========= END OF MEASURE =========\n");
+    if (to_txt) {
+    	fclose(fp);
+    }
     return 1;
 }
