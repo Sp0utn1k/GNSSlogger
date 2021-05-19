@@ -152,7 +152,7 @@ int main(int argc, char *argv[]){
 		wrap_config(&config_message[0], config_len, &final_config_msg[0], &final_config_len);
 		print_hex(final_config_msg,0,final_config_len);
 	}
-	exit(1);
+	// exit(1);
 	FILE * fp;
 	if (to_txt) {
 		if (erase) {
@@ -172,7 +172,12 @@ int main(int argc, char *argv[]){
     Connection connection = setup_connection(port);
 	memset(msg,0,sizeof(msg));
 	time_buf = time(NULL);
+	int progression =  0;
 	while (time(NULL)-time_buf < measure_time) {
+
+		progression = 100*(measure_time-(int)(time(NULL)-time_buf))/measure_time;
+		printf("\r%d",progression);
+		fflush(stdout);
 		while (fpos<2) {
 			read_n_bytes(&connection,&msg[fpos],1);
 			if (msg[fpos] == '$') {
