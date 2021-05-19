@@ -38,7 +38,7 @@ bool check_ack(Connection* connection) {
 	bool ok = false;
 	bool is_ACK = false;
 	int fpos;
-	char buf[8];
+	char buf[10];
 	char checksum[2];
 	time_t time_buf = time(NULL);
 	unsigned long timeout = 1;
@@ -58,7 +58,7 @@ bool check_ack(Connection* connection) {
 
 		if (fpos==2) {
 			read_n_bytes(connection,&buf[2],1);
-			if (buf[0]!=ACK[0]) {
+			if (buf[2]!=ACK[0]) {
 				fpos = 0;
 				continue;
 			}
@@ -67,18 +67,19 @@ bool check_ack(Connection* connection) {
 			}
 
 			read_n_bytes(connection,&buf[3],1);
-			if (buf[1]==ACK[1]) {
+			if (buf[3]==ACK[1]) {
 				is_ACK = true;
 			}
 
 			read_n_bytes(connection,&buf[4],6);
 			memcpy(&checksum,&buf[8],2);
+			
 
-			if (!verify_checksum(buf,sizeof(8),checksum)) {
+			if (!verify_checksum(buf,8,checksum)) {
 				printf("Warning : Bad checksum\n");
 				is_ACK = false;
 			}else{
-				return true;
+				return is_ACK;
 			}
 		}
 	}

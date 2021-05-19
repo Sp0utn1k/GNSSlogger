@@ -169,7 +169,7 @@ int main(int argc, char *argv[]){
 		int i = 0;
 		do {
 			if (i>=10) {
-				printf("Error : Couldn't send config to u-blox.");
+				printf("Error : Couldn't send config to u-blox.\n");
 				exit(0);
 			}
 			write_n_bytes(&connection,final_config_msg, final_config_len);
@@ -243,5 +243,6 @@ int main(int argc, char *argv[]){
     if (to_txt) {
     	fclose(fp);
     }
+    printf("\n");
     return 1;
 }
