@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include<stdlib.h>
 // #define MOCK 1
 
 #ifdef __unix__

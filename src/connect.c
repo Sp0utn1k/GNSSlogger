@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<string.h>
+#include<stdlib.h>
 #include"connect.h"
 // #define MOCK 1
 #ifdef MOCK
@@ -46,11 +47,15 @@
         close(connection.serial_port);
     }
 
-    Connection setup_connection() {
+    Connection setup_connection(char port[]) {
         Connection connection;
-        int serial_port = open("/dev/ttyACM0", O_RDWR);
+        char portname[20] = "/dev/";
+        strcat(portname,port);
+
+        int serial_port = open(portname, O_RDWR);
         if (serial_port < 0) { // Errors check
             printf("Error %i from open: %s\n", errno, strerror(errno));
+            exit(0);
         }
 
         // Create new termios struct, we call it 'tty' for convention
@@ -64,6 +69,7 @@
         // is undefined
         if(tcgetattr(serial_port, &tty) != 0) {
             printf("Error %i from tcgetattr: %s\n", errno, strerror(errno));
+            exit(0);
         }
 
         tty.c_cflag |= CREAD | CLOCAL; // Turn on READ & ignore ctrl lines (CLOCAL = 1)
@@ -87,6 +93,7 @@
 
         if (tcsetattr(serial_port, TCSANOW, &tty) != 0) {
             printf("Error %i from tcsetattr: %s \n", errno, strerror(errno));
+            exit(0);
         }
         connection.serial_port= serial_port;
         return connection;
@@ -94,7 +101,7 @@
 #elif defined(_WIN32) || defined(WIN32)
     #include<windows.h>
 
-    Connection setup_connection(){
+    Connection setup_connection(char port[]){
     HANDLE hComm;
 	
 	BOOL Write_Status;
@@ -103,7 +110,9 @@
 	BOOL  Read_Status;                      // Status of the various operations 
 	DWORD dwEventMask;
 	
-    hComm = CreateFileA("\\\\.\\COM5",                //port name
+    char portname[20] = "\\\\.\\";
+    strcat(portname,port);
+    hComm = CreateFileA(portname,                //port name
                         GENERIC_READ | GENERIC_WRITE, //Read/Write
                         0,                            // No Sharing
                         NULL,                         // No Security

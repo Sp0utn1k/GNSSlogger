@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include<stdlib.h>
 
 #ifdef __unix__
     
@@ -109,8 +110,13 @@ bool check_ack(Connection* connection) {
 	return is_ACK;
 }
 
-int main() {
-	Connection connection = setup_connection();
+int main(int argc, char *argv[])  {
+
+
+	
+
+
+	Connection connection = setup_connection(port);
 	while (true) {
 		save_cfg(&connection);
 		check_ack(&connection);
