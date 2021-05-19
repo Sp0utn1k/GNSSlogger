@@ -24,3 +24,4 @@
 Connection setup_connection();
 void close_connection(Connection connection);
 void read_n_bytes(Connection* connection, char* msg,int n);
+void write_n_bytes(Connection* connection,char msg[],int len);

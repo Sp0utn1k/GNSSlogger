@@ -38,13 +38,17 @@
         }
     }
 
+    void write_n_bytes(Connection* connection,char msg[],int len) {
+    	write(connection->serial_port, msg, len);
+    }
+
     void close_connection(Connection connection){
         close(connection.serial_port);
     }
 
     Connection setup_connection() {
         Connection connection;
-        int serial_port = open("/dev/ttyACM1", O_RDWR);
+        int serial_port = open("/dev/ttyACM0", O_RDWR);
         if (serial_port < 0) { // Errors check
             printf("Error %i from open: %s\n", errno, strerror(errno));
         }
