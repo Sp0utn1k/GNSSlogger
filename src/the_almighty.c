@@ -118,6 +118,7 @@ int main(int argc, char *argv[]){
 				erase = true;
 			}else if (strcmp(argv[i],"-h")==0) {
 				display_help();
+				return 1;
 			}
 			else if (strcmp(argv[i],"-t")==0) {
 				if (argc == i+1 || argv[i+1][0] == '-') {
@@ -164,10 +165,18 @@ int main(int argc, char *argv[]){
 		wrap_config(&config_message[0], config_len, &final_config_msg[0], &final_config_len);
 		print_hex(final_config_msg,0,final_config_len);
 		//printf("%d",final_config_len);
-		write_n_bytes(&connection,final_config_msg, final_config_len);
-		if(check_ack(&connection)) {
-			printf("Config message sent correctly\n");
-		}
+
+		int i = 0;
+		do {
+			if (i>=10) {
+				printf("Error : Couldn't send config to u-blox.");
+				exit(0);
+			}
+			write_n_bytes(&connection,final_config_msg, final_config_len);
+			i++;
+		}while (!check_ack(&connection));
+		if (i)
+		printf("Config message sent correctly\n");
 
 	}
 	// exit(1);
@@ -193,9 +202,12 @@ int main(int argc, char *argv[]){
 	int progression =  0;
 	while (time(NULL)-time_buf < measure_time) {
 
-		progression = 100*(measure_time-(int)(time(NULL)-time_buf))/measure_time;
-		printf("\r%d",progression);
-		fflush(stdout);
+		if (to_txt) {
+			progression = 100 - 100*(measure_time-(int)(time(NULL)-time_buf))/measure_time;
+			printf("\rProgression : %d%%",progression);
+			fflush(stdout);
+		}
+
 		while (fpos<2) {
 			read_n_bytes(&connection,&msg[fpos],1);
 			if (msg[fpos] == '$') {
