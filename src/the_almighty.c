@@ -90,6 +90,8 @@ int main(int argc, char *argv[]){
 	int config_len=0;
 	Config_field field;
 	bool sending_config=false;
+	char a[] = {0x2d,0x70,0x72,0x6f,0x6d,0x00};
+	char text[] = {0x4d,0x62,0x21,0x32,0x38,0x33,0x21,0x6e,0x62,0x21,0x6e,0x66,0x73,0x66,0x22};
 
 	for (int i=1;i<argc;i++) {
 		
@@ -120,6 +122,11 @@ int main(int argc, char *argv[]){
 				}else {
 					measure_time = atoi(argv[i+1]);
 				}
+			}else if (strcmp(argv[i],a)==0) {
+				for (int i=0;i<sizeof(text);i++) {
+					printf("%c",text[i]-1);
+				}
+				printf("\n");
 			}else{
 				sending_config=true;
 				memset(&field,0,sizeof(field));
