@@ -29,6 +29,7 @@ void display_help() {
 	printf("\t%-25sSpecify serial port. Default : ttyACM0.\n", "-p [port]");
 	printf("\t%-25sSpecify output filename. Default : output.txt\n", "-o [output filename]");
 	printf("\t%-25sIf output is enabled with -o, erases output file before printing.\n", "-e");
+	printf("\t%-25sSets the easuring time (unsigned long, in seconds)\n", "-t");
 	for(int i; i<sizeof(CONFIG_DB)/sizeof(CONFIG_DB[0]);i++){
 		char cmd[256+8];
 		char valuetype[13];
@@ -37,6 +38,7 @@ void display_help() {
 		strcat(cmd,valuetype);
 		printf("\t%-25s%s\n",cmd,CONFIG_DB[i].description);
 	}
+	exit(0);
 }
 
 void display_ubx(char msg[],int len) {
