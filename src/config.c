@@ -73,9 +73,8 @@ bool check_ack(Connection* connection) {
 
 			read_n_bytes(connection,&buf[4],6);
 			memcpy(&checksum,&buf[8],2);
-			int len = 6;
 
-			if (!verify_checksum(buf,len,checksum)) {
+			if (!verify_checksum(buf,sizeof(8),checksum)) {
 				printf("Warning : Bad checksum\n");
 				is_ACK = false;
 			}else{
