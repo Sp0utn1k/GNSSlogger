@@ -104,7 +104,7 @@ void wrap_config(char* inwards,int in_len,char* msg,int* msg_len){
 	uint16_t field_len=4+in_len;
 	memset(msg+4,field_len%256,1);
 	memset(msg+5,field_len/256,1);
-	char middle[4] ={0,0x10,0,0};
+	char middle[4] ={0,0x01,0,0};
 	memcpy(msg+6,&middle,4);
 	memcpy(msg+10,inwards,in_len);
 

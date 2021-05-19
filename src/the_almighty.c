@@ -162,7 +162,7 @@ int main(int argc, char *argv[]){
 		char final_config_msg[800];
 		int final_config_len;
 		wrap_config(&config_message[0], config_len, &final_config_msg[0], &final_config_len);
-		//print_hex(final_config_msg,0,final_config_len);
+		print_hex(final_config_msg,0,final_config_len);
 		//printf("%d",final_config_len);
 		write_n_bytes(&connection,final_config_msg, final_config_len);
 		if(check_ack(&connection)) {
