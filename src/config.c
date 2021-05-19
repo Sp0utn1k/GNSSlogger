@@ -57,7 +57,7 @@ bool check_ack(Connection* connection) {
 		}
 
 		if (fpos==2) {
-			read_n_bytes(connection,&buf[0],1);
+			read_n_bytes(connection,&buf[2],1);
 			if (buf[0]!=ACK[0]) {
 				fpos = 0;
 				continue;
@@ -66,13 +66,13 @@ bool check_ack(Connection* connection) {
 				ok = true;
 			}
 
-			read_n_bytes(connection,&buf[1],1);
+			read_n_bytes(connection,&buf[3],1);
 			if (buf[1]==ACK[1]) {
 				is_ACK = true;
 			}
 
-			read_n_bytes(connection,&buf[2],6);
-			memcpy(&checksum,&buf[6],2);
+			read_n_bytes(connection,&buf[4],6);
+			memcpy(&checksum,&buf[8],2);
 			int len = 6;
 
 			if (!verify_checksum(buf,len,checksum)) {
