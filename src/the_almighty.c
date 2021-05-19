@@ -29,6 +29,7 @@ void display_help() {
 	printf("\t%-25sSpecify serial port. Default : ttyACM0.\n", "-p [port]");
 	printf("\t%-25sSpecify output filename. Default : output.txt\n", "-o [output filename]");
 	printf("\t%-25sIf output is enabled with -o, erases output file before printing.\n", "-e");
+	printf("\t%-25sSets the easuring time (unsigned long, in seconds)\n", "-t");
 	for(int i; i<sizeof(CONFIG_DB)/sizeof(CONFIG_DB[0]);i++){
 		char cmd[256+8];
 		char valuetype[13];
@@ -53,6 +54,21 @@ void display_ubx(char msg[],int len) {
 void save_ubx(char msg[],int len,FILE * fp) {
 	for (int i=0;i<len;i++) {
 		fprintf(fp,"%c",msg[i]);
+	}
+}
+
+void read_nmea(Connection* connection, char *msg,bool to_txt,FILE* fp) {
+	int i = 0;
+	while (*(msg+i) != '\n') {
+		i++;
+		read_n_bytes(connection,(msg+i),1);
+	}
+
+	if (to_txt) {
+		save_ubx(msg,i+1,fp);
+	}
+	else {
+		display_ubx(msg,i+1);
 	}
 }
 
@@ -146,14 +162,15 @@ int main(int argc, char *argv[]){
 	    // fprintf(fp, "\n========= START OF MEASURE =========\n");
 	}
 
-	
-
     Connection connection = setup_connection(port);
 	memset(msg,0,sizeof(msg));
 	time_buf = time(NULL);
 	while (time(NULL)-time_buf < measure_time) {
 		while (fpos<2) {
 			read_n_bytes(&connection,&msg[fpos],1);
+			if (msg[fpos] == '$') {
+				read_nmea(&connection,&msg[0],to_txt,fp);
+			}
 			if (msg[fpos] == HEADER[fpos]) {
 				fpos++;
 			}
