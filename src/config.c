@@ -3,6 +3,8 @@
 #include <stdbool.h>
 #include<stdlib.h>
 #include<stdint.h>
+#include<time.h>
+
 #ifdef __unix__
     
     #include <fcntl.h> // Contains file controls like O_RDWR
@@ -34,12 +36,15 @@ void save_cfg(Connection* connection) {
 */
 bool check_ack(Connection* connection) {
 	bool ok = false;
-	bool is_ACK;
+	bool is_ACK = false;
 	int fpos;
 	char buf[8];
 	char checksum[2];
+	time_t time_buf = time(NULL);
+	unsigned long timeout = 1;
 
-	while (ok ==false) {
+
+	while (ok ==false && (time(NULL)-time_buf)<timeout) {
 		fpos = 0;
 		while (fpos<2) {
 			read_n_bytes(connection,&buf[fpos],1);
