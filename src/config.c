@@ -115,7 +115,6 @@ bool check_ack(Connection* connection) {
 int main(int argc, char *argv[])  {
 
 	
-
 	Connection connection = setup_connection(port);
 
 	//while (true) {
