@@ -25,7 +25,7 @@
 
 void display_help() {
 	printf("\n==========   Help section for u-blox configuration :   ============\n\n");
-	printf("\t%-25sDisplay this help section.\n", "-h");
+	printf("\t%-25sDisplay this help section.\n", "-h or --help");
 	printf("\t%-25sSpecify serial port. Default : ttyACM0.\n", "-p [port]");
 	printf("\t%-25sSpecify output filename. Default : output.txt\n", "-o [output filename]");
 	printf("\t%-25sIf output is enabled with -o, erases output file before printing.\n", "-e");
@@ -76,6 +76,11 @@ void read_nmea(Connection* connection, char *msg,bool to_txt,FILE* fp) {
 
 int main(int argc, char *argv[]){
 
+	if (argc == 1) {
+		display_help();
+		return 1;
+	}
+
 	char checksum[2];
 	char port[20] = "ttyACM0"; // Default serial port
 	char outputfile[256] = "output.ubx";
@@ -116,7 +121,7 @@ int main(int argc, char *argv[]){
 				}
 			}else if (strcmp(argv[i],"-e")==0) {
 				erase = true;
-			}else if (strcmp(argv[i],"-h")==0) {
+			}else if (strcmp(argv[i],"-h")==0 || strcmp(argv[i],"--help")==0) {
 				display_help();
 				return 1;
 			}
