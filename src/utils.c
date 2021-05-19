@@ -24,5 +24,5 @@ void compute_checksum(char msg[],int len, char* CK_A,char* CK_B){
 		*CK_A = *CK_A + msg[i];
 		*CK_B = *CK_B + *CK_A;
 	}
-	printf("chksum: %02hhx %02hhx",*CK_A,*CK_B);
+	
 }

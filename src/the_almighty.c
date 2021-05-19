@@ -29,8 +29,10 @@ void display_help() {
 	printf("\t%-25sSpecify serial port. Default : ttyACM0.\n", "-p [port]");
 	printf("\t%-25sSpecify output filename. Default : output.txt\n", "-o [output filename]");
 	printf("\t%-25sIf output is enabled with -o, erases output file before printing.\n", "-e");
-	printf("\t%-25sSets the easuring time (unsigned long, in seconds)\n", "-t");
-	for(int i; i<sizeof(CONFIG_DB)/sizeof(CONFIG_DB[0]);i++){
+	printf("\t%-25sSets the measuring time (unsigned long, in seconds)\n", "-t");
+
+	for(int i=0; i<sizeof(CONFIG_DB)/sizeof(CONFIG_DB[0]);i++){
+		
 		char cmd[256+8];
 		char valuetype[13];
 		strcpy(cmd,CONFIG_DB[i].cmd_line_arg);
@@ -38,7 +40,7 @@ void display_help() {
 		strcat(cmd,valuetype);
 		printf("\t%-25s%s\n",cmd,CONFIG_DB[i].description);
 	}
-	exit(0);
+	fflush(stdout);
 }
 
 void display_ubx(char msg[],int len) {
@@ -84,6 +86,7 @@ int main(int argc, char *argv[]){
 	bool erase = false;
 	unsigned long measure_time = 10;
 	time_t time_buf;
+	int n_fields=0;
 
 	char config_message[256];
 	memset(config_message,0,256);
@@ -129,6 +132,11 @@ int main(int argc, char *argv[]){
 					field.make_message(&field.key[0],argv[i+1],&config_message[config_len] ,&len);
 					
 					config_len+=len;
+					n_fields+=1;
+					if(n_fields>64){
+						printf("More than 64 cfg messages in one go is not supported.\nPlease split cfg messages in multiple executions of the program\n");
+						return 0;
+					}
 					//print_hex(config_message,0,config_len);
 				}else {
 					printf("Error : option %s does not exist\n",argv[i]);
@@ -139,11 +147,21 @@ int main(int argc, char *argv[]){
 			}
 		}
 	}
+
+	Connection connection = setup_connection(port);
+
 	if(sending_config){
+		printf("Attempting to send configuration message\n");
 		char final_config_msg[800];
 		int final_config_len;
 		wrap_config(&config_message[0], config_len, &final_config_msg[0], &final_config_len);
-		print_hex(final_config_msg,0,final_config_len);
+		//print_hex(final_config_msg,0,final_config_len);
+		//printf("%d",final_config_len);
+		write_n_bytes(&connection,final_config_msg, final_config_len);
+		if(check_ack(&connection)) {
+			printf("Config message sent correctly\n");
+		}
+
 	}
 	exit(1);
 	FILE * fp;
@@ -162,7 +180,7 @@ int main(int argc, char *argv[]){
 	    // fprintf(fp, "\n========= START OF MEASURE =========\n");
 	}
 
-    Connection connection = setup_connection(port);
+    
 	memset(msg,0,sizeof(msg));
 	time_buf = time(NULL);
 	while (time(NULL)-time_buf < measure_time) {

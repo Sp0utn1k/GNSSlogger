@@ -102,9 +102,13 @@ void wrap_config(char* inwards,int in_len,char* msg,int* msg_len){
 	char header[4]={0xb5, 0x62, 0x06, 0x8a};
 	memcpy(msg,&header,4);
 	uint16_t field_len=4+in_len;
-	memset(msg+4,field_len+1,1);
-	memset(msg+5,field_len,1);
-	memcpy(msg+6,inwards,in_len);
-	compute_checksum(msg, field_len, &msg[field_len+1], &msg[field_len+2]);
-	*msg_len=field_len+2;
+	memset(msg+4,field_len%256,1);
+	memset(msg+5,field_len/256,1);
+	char middle[4] ={0,0x10,0,0};
+	memcpy(msg+6,&middle,4);
+	memcpy(msg+10,inwards,in_len);
+
+	compute_checksum(msg, field_len, msg+in_len+10, msg+in_len+11);
+	*msg_len=in_len+12;
 }
+
