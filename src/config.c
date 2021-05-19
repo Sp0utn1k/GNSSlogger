@@ -14,23 +14,10 @@
 	#include<windows.h>
 
 #endif
+
 #include"connect.h"
-
-const char HEADER[] = { 0xB5, 0x62 };
-const char ACK[] = {0x05, 0x01};
-const char NAK[] = {0x05, 0x00};
-const char CFG_cls = 0x06;
-int fpos;
-
-void print_hex(char msg[],int start,int len) {
-	int i;
-	for (i=start;i<len+start;i++) {
-		printf("0x%02hhx ", msg[i]);
-	}
-	printf("\n");
-}
-
-
+#include"utils.h"
+/*
 void save_cfg(Connection* connection) {
 	char msg[20];
 	memset(msg,0,sizeof(msg));
@@ -51,17 +38,7 @@ void save_cfg(Connection* connection) {
 	msg[19] = CK_B;
 	write_n_bytes(connection,msg,20);
 }
-
-bool verify_checksum(char msg[],int len,char checksum[]) {
-	char CK_A = 0;
-	char CK_B = 0;
-		for (int i = 0; i < len; i++) {
-		CK_A = CK_A + msg[i];
-		CK_B = CK_B + CK_A;
-	}
-	return CK_A==checksum[0] && CK_B==checksum[1];
-}
-
+*/
 bool check_ack(Connection* connection) {
 	bool ok = false;
 	bool is_ACK;
@@ -111,7 +88,7 @@ bool check_ack(Connection* connection) {
 	is_ACK = false;
 	return is_ACK;
 }
-
+/*
 int main(int argc, char *argv[])  {
 
 	
@@ -127,3 +104,4 @@ int main(int argc, char *argv[])  {
 	close_connection(connection);
 	return 1;
 }
+*/

@@ -15,43 +15,17 @@
 	#include<windows.h>
 
 #endif
+
+#include"utils.h"
 #include"connect.h"
-
-char checksum[2];
-char port[20] = "ttyACM0"; // Default serial port
-char outputfile[256] = "output.txt";
-char msg[256];
-int fpos = 0;
-unsigned short len;
-char prev_arg;
-bool to_txt = false;
-bool erase = false;
-
-const char HEADER[] = { 0xB5, 0x62 };
-
-void print_hex(char msg[],int start,int len) {
-	int i;
-	for (i=start;i<len+start;i++) {
-		printf("0x%02hhx ", msg[i]);
-	}
-	printf("\n");
-}
-
-bool verify_checksum(char msg[],int len,char checksum[]) {
-	char CK_A = 0;
-	char CK_B = 0;
-		for (int i = 2; i < len; i++) {
-		CK_A = CK_A + msg[i];
-		CK_B = CK_B + CK_A;
-	}
-	return CK_A==checksum[0] && CK_B==checksum[1];
-}
+#include"config.h"
+#include"config_data.h"
 
 void display_help() {
 	printf("Help section for u-blox configuration : \n\n");
 	printf("%-20s", "\t-h"); printf("Display this help section.\n");
 	printf("%-20s", "\t-p [port]");printf("Specify serial port. Default : ttyACM0.\n");
-	printf("%-20s", "\t-o [output filename]");printf("Specify output filename. Default : %s.\n",outputfile);
+	printf("%-20s", "\t-o [output filename]");printf("Specify output filename. Default : output.txt\n");
 	printf("%-20s", "\t-e"); printf("If output is enabled with -o, erases output file before printing.\n");
 }
 
@@ -74,46 +48,65 @@ void save_ubx(char msg[],int len,FILE * fp) {
 	}
 	fprintf(fp,"\n\n");
 }
+
+
+
+
 int main(int argc, char *argv[]){
+
+	char checksum[2];
+	char port[20] = "ttyACM0"; // Default serial port
+	char outputfile[256] = "output.txt";
+	char msg[256];
+	int fpos = 0;
+	unsigned short len;
+	bool to_txt = false;
+	bool erase = false;
+
+	char config_message[256];
+	memset(config_message,0,256);
+	int config_len=0;
+	Config_field field;
 
 	for (int i=1;i<argc;i++) {
 		
-		if (prev_arg == 'p') {
-			prev_arg = '\0';
-			strcpy(port,argv[i]);
-		}
+		if(argv[i][0]=='-'){
+			if (strcmp(argv[i],"-p")==0) {
+				if(argc == i+1 || argv[i+1][0] == '-') {
+					printf("Error : No serial port specified after -p.\n");
+					return 0;
+				}else {
+					strcpy(port,argv[i+1]);
+				}
+			} else if (strcmp(argv[i],"-o")==0) {
+				to_txt = true;
+				if (argc == i+1 || argv[i+1][0] == '-') {
+					printf("No output filename specified after -o. Default : %s\n",outputfile);
+				}
+				else {
+					strcpy(outputfile,argv[i+1]);
+				}
+			}else if (strcmp(argv[i],"-e")==0) {
+				erase = true;
+			}else if (strcmp(argv[i],"-h")==0) {
+				display_help();
+			}else{
+				memset(&field,0,sizeof(field));
+				if(get_field(argv[i],&field)){
+					int len;
+					//printf("%d \n",config_len);
+					field.make_message(&field.key[0],argv[i+1],&config_message[config_len] ,&len);
+					
+					config_len+=len;
+					//print_hex(config_message,0,config_len);
+				}
 
-		if (prev_arg == 'o') {
-			prev_arg = '\0';
-			strcpy(outputfile,argv[i]);
-		}
-
-		if (strcmp(argv[i],"-h")==0) {
-			display_help();
-		}
-
-		if (strcmp(argv[i],"-p") == 0) {
-			if (argc == i+1 || argv[i+1][0] == '-') {
-				printf("Error : No serial port specified after -p.\n");
-				return 0;
+				
 			}
-			prev_arg = 'p';
-		}
-
-		if (strcmp(argv[i],"-o") == 0) {
-			to_txt = true;
-			if (argc == i+1 || argv[i+1][0] == '-') {
-				printf("No output filename specified after -o. Default : %s\n",outputfile);
-			}
-			else {
-				prev_arg = 'o';
-			}
-		}
-
-		if (strcmp(argv[i],"-e")==0) {
-			erase = true;
 		}
 	}
+
+	exit(1);
 
 	FILE * fp;
 	if (to_txt) {
@@ -123,7 +116,7 @@ int main(int argc, char *argv[]){
 		else if ((fp = fopen(outputfile, "r")))
 	    {
 	    	fp = fopen(outputfile, "a");
-	    	fprintf(fp,"\n\n");
+	    	fprintf(fp,"\n");
 	    }
 	    else {
 	    	fp = fopen(outputfile, "a");
