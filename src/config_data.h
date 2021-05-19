@@ -21,9 +21,9 @@ void make_bool_message(const char* key,char* value, char* out_buff, int* out_len
 }
 
 static const Config_field CONFIG_DB[3]={
-		{"--bd","Bool", "Use BeiDou geostationary satellites (PRN 1-5)", make_bool_message, {0x10,0x34,0x00,0x14}},
-		{"--ubx","Bool", "Information message enable flags for the UBX protocol", make_bool_message, {0x20,0x92,0x00,0x04}},
-		{"--nmea","Bool", "Information message enable flags for the NMEA protocol", make_bool_message, {0x20,0x92,0x00,0x09}}
+		{"--bd","Bool", "Use BeiDou geostationary satellites (PRN 1-5)", make_bool_message, {0x14,0x00,0x34,0x10}},
+		{"--ubx","Bool", "Information message enable flags for the UBX protocol", make_bool_message, {0x04,0x00,0x92,0x20}},
+		{"--nmea","Bool", "Information message enable flags for the NMEA protocol", make_bool_message, {0x09,0x00,0x92,0x20}}
 };
 
 
