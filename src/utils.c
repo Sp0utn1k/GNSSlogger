@@ -11,8 +11,8 @@ void print_hex(char msg[],int start,int len) {
 }
 
 bool verify_checksum(char msg[],int len,char checksum[]) {
-	char CK_A;
-	char CK_B;
+	char CK_A = 0;
+	char CK_B = 0;
 	compute_checksum(msg, len, &CK_A, &CK_B);
 	return CK_A==checksum[0] && CK_B==checksum[1];
 }
