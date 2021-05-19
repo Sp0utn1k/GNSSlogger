@@ -3,6 +3,7 @@
 #include<string.h>
 typedef struct Config_field{
 	const char cmd_line_arg[10];
+	const char var_type[10];
 	const char description[256];
 	const void (*make_message)(const char*,char*, char*, int*);
 	const char key[4];
@@ -19,9 +20,9 @@ void make_bool_message(const char* key,char* value, char* out_buff, int* out_len
 }
 
 static const Config_field CONFIG_DB[3]={
-		{"--bd", "Use BeiDou geostationary satellites (PRN 1-5)", make_bool_message, {0x10,0x34,0x00,0x14}},
-		{"--ubx", "Information message enable flags for the UBX protocol", make_bool_message, {0x20,0x92,0x00,0x04}},
-		{"--nmea", "Information message enable flags for the NMEA protocol", make_bool_message, {0x20,0x92,0x00,0x09}}
+		{"--bd","Bool", "Use BeiDou geostationary satellites (PRN 1-5)", make_bool_message, {0x10,0x34,0x00,0x14}},
+		{"--ubx","Bool", "Information message enable flags for the UBX protocol", make_bool_message, {0x20,0x92,0x00,0x04}},
+		{"--nmea","Bool", "Information message enable flags for the NMEA protocol", make_bool_message, {0x20,0x92,0x00,0x09}}
 };
 
 
