@@ -22,11 +22,19 @@
 #include"config_data.h"
 
 void display_help() {
-	printf("Help section for u-blox configuration : \n\n");
-	printf("%-20s", "\t-h"); printf("Display this help section.\n");
-	printf("%-20s", "\t-p [port]");printf("Specify serial port. Default : ttyACM0.\n");
-	printf("%-20s", "\t-o [output filename]");printf("Specify output filename. Default : output.txt\n");
-	printf("%-20s", "\t-e"); printf("If output is enabled with -o, erases output file before printing.\n");
+	printf("\n==========   Help section for u-blox configuration :   ============\n\n");
+	printf("\t%-25sDisplay this help section.\n", "-h");
+	printf("\t%-25sSpecify serial port. Default : ttyACM0.\n", "-p [port]");
+	printf("\t%-25sSpecify output filename. Default : output.txt\n", "-o [output filename]");
+	printf("\t%-25sIf output is enabled with -o, erases output file before printing.\n", "-e");
+	for(int i; i<sizeof(CONFIG_DB)/sizeof(CONFIG_DB[0]);i++){
+		char cmd[256+8];
+		char valuetype[13];
+		strcpy(cmd,CONFIG_DB[i].cmd_line_arg);
+		sprintf(valuetype," [%s]",CONFIG_DB[i].var_type);
+		strcat(cmd,valuetype);
+		printf("\t%-25s%s\n",cmd,CONFIG_DB[i].description);
+	}
 }
 
 void display_ubx(char msg[],int len) {
