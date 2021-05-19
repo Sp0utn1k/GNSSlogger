@@ -37,6 +37,7 @@ void display_help() {
 		strcat(cmd,valuetype);
 		printf("\t%-25s%s\n",cmd,CONFIG_DB[i].description);
 	}
+	exit(0);
 }
 
 void display_ubx(char msg[],int len) {
@@ -72,6 +73,7 @@ int main(int argc, char *argv[]){
 	memset(config_message,0,256);
 	int config_len=0;
 	Config_field field;
+	bool sending_config=false;
 
 	for (int i=1;i<argc;i++) {
 		
@@ -103,6 +105,7 @@ int main(int argc, char *argv[]){
 					measure_time = atoi(argv[i+1]);
 				}
 			}else{
+				sending_config=true;
 				memset(&field,0,sizeof(field));
 				if(get_field(argv[i],&field)){
 					int len;
@@ -120,7 +123,13 @@ int main(int argc, char *argv[]){
 			}
 		}
 	}
-
+	if(sending_config){
+		char final_config_msg[800];
+		int final_config_len;
+		wrap_config(&config_message[0], config_len, &final_config_msg[0], &final_config_len);
+		print_hex(final_config_msg,0,final_config_len);
+	}
+	exit(1);
 	FILE * fp;
 	if (to_txt) {
 		if (erase) {

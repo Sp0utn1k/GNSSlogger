@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include<stdlib.h>
-
+#include<stdint.h>
 #ifdef __unix__
     
     #include <fcntl.h> // Contains file controls like O_RDWR
@@ -28,14 +28,7 @@ void save_cfg(Connection* connection) {
 		msg[i] = 0xff;
 	}
 
-	char CK_A = 0;
-	char CK_B = 0;
-	for (int i = 2; i < 18; i++) {
-		CK_A = CK_A + msg[i];
-		CK_B = CK_B + CK_A;
-	}
-	msg[18] = CK_A;
-	msg[19] = CK_B;
+	compute_checksum(msg[], len, &msg[18], &msg[19]);
 	write_n_bytes(connection,msg,20);
 }
 */
@@ -105,3 +98,13 @@ int main(int argc, char *argv[])  {
 	return 1;
 }
 */
+void wrap_config(char* inwards,int in_len,char* msg,int* msg_len){
+	char header[4]={0xb5, 0x62, 0x06, 0x8a};
+	memcpy(msg,&header,4);
+	uint16_t field_len=4+in_len;
+	memset(msg+4,field_len+1,1);
+	memset(msg+5,field_len,1);
+	memcpy(msg+6,inwards,in_len);
+	compute_checksum(msg, field_len, &msg[field_len+1], &msg[field_len+2]);
+	*msg_len=field_len+2;
+}

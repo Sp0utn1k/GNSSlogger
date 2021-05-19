@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<stdbool.h>
 typedef struct Config_field{
 	const char cmd_line_arg[10];
 	const char var_type[10];

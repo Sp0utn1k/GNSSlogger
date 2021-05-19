@@ -19,3 +19,4 @@ void print_hex(char msg[],int start,int len);
 void save_cfg(Connection* connection);
 bool verify_checksum(char msg[],int len,char checksum[]);
 bool check_ack(Connection* connection);
+void wrap_config(char* inwards,int in_len,char* msg,int* msg_len);
