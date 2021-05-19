@@ -26,3 +26,11 @@ void compute_checksum(char msg[],int len, char* CK_A,char* CK_B){
 	}
 	
 }
+
+void array_reverse(char* in_arr,int arr_len){
+	char buf[arr_len];
+	for(int i=0; i<arr_len; i++){
+		buf[i]=*(in_arr+arr_len-i);
+	}
+	memcpy(in_arr,buf,arr_len);
+}
