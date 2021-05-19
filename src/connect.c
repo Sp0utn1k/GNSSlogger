@@ -152,6 +152,7 @@
 		connection.hComm=hComm;
 		return connection;
 	}
+    /*
 	else
 	{
 		printf("\n   Setting DCB Structure Successful\n");
@@ -161,7 +162,7 @@
 		printf("\n       Parity   = %d", dcbSerialParams.Parity);
 		printf("\n\n");
 	}
-
+    */
 	// Set COM port timeout settings
 	timeouts.ReadIntervalTimeout = 50;
 	timeouts.ReadTotalTimeoutConstant = 50;
@@ -191,7 +192,14 @@
     void read_n_bytes(Connection* connection, char* msg,int n){
         unsigned long received;
         if(!ReadFile(connection->hComm, msg, n, &received, NULL))
-            printf("Error reading from serial port");
+            printf("Error reading from serial port\n");
 
+    }
+    void write_n_bytes(Connection* connection, char* msg,int n){
+        unsigned long written;
+        if(!WriteFile(connection->hComm, msg, n, &written, NULL))
+            printf("Error writing to serial port\n");
+        if(written != n)
+            printf("Couldn't write all bytes to serial\n");
     }
 #endif

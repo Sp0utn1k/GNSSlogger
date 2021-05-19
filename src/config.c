@@ -103,6 +103,8 @@ bool check_ack(Connection* connection) {
 			if (!verify_checksum(buf,len,checksum)) {
 				printf("Warning : Bad checksum\n");
 				is_ACK = false;
+			}else{
+				return true;
 			}
 		}
 	}
@@ -112,16 +114,15 @@ bool check_ack(Connection* connection) {
 
 int main(int argc, char *argv[])  {
 
-
-	
-
-
 	Connection connection = setup_connection(port);
-	while (true) {
+
+	//while (true) {
 		save_cfg(&connection);
-		check_ack(&connection);
-	}
+		
+		if(check_ack(&connection)) {
+				printf("ok\n");
+		}
+	//}
 	close_connection(connection);
 	return 1;
 }
-
