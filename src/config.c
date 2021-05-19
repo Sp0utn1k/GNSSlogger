@@ -112,7 +112,7 @@ void wrap_config(char* inwards,int in_len,char* msg,int* msg_len){
 	memcpy(msg+6,&middle,4);
 	memcpy(msg+10,inwards,in_len);
 
-	compute_checksum(msg, field_len, msg+in_len+10, msg+in_len+11);
+	compute_checksum(msg,  in_len+10, msg+in_len+10, msg+in_len+11);
 	*msg_len=in_len+12;
 }
 
