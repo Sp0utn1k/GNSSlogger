@@ -55,11 +55,11 @@ void save_ubx(char msg[],int len,FILE * fp) {
 	}
 }
 
-void read_nmea(connection* connection, char *msg[],bool to_txt) {
+void read_nmea(Connection* connection, char *msg,bool to_txt,FILE* fp) {
 	int i = 0;
 	while (*(msg+i) != '\n') {
 		i++;
-		read_n_bytes(connection,&msg[i],1);
+		read_n_bytes(connection,(msg+i),1);
 	}
 
 	if (to_txt) {
@@ -158,8 +158,8 @@ int main(int argc, char *argv[]){
 	while (time(NULL)-time_buf < measure_time) {
 		while (fpos<2) {
 			read_n_bytes(&connection,&msg[fpos],1);
-			if (msg[fpos] == "$") {
-				read_nmea(&connection,&msg,to_txt);
+			if (msg[fpos] == '$') {
+				read_nmea(&connection,&msg[0],to_txt,fp);
 			}
 			if (msg[fpos] == HEADER[fpos]) {
 				fpos++;
