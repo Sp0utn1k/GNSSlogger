@@ -55,6 +55,21 @@ void save_ubx(char msg[],int len,FILE * fp) {
 	}
 }
 
+void read_nmea(connection* connection, char *msg[],bool to_txt) {
+	int i = 0;
+	while (*(msg+i) != '\n') {
+		i++;
+		read_n_bytes(connection,&msg[i],1);
+	}
+
+	if (to_txt) {
+		save_ubx(msg,i+1,fp);
+	}
+	else {
+		display_ubx(msg,i+1);
+	}
+}
+
 int main(int argc, char *argv[]){
 
 	char checksum[2];
@@ -137,14 +152,15 @@ int main(int argc, char *argv[]){
 	    // fprintf(fp, "\n========= START OF MEASURE =========\n");
 	}
 
-	
-
     Connection connection = setup_connection(port);
 	memset(msg,0,sizeof(msg));
 	time_buf = time(NULL);
 	while (time(NULL)-time_buf < measure_time) {
 		while (fpos<2) {
 			read_n_bytes(&connection,&msg[fpos],1);
+			if (msg[fpos] == "$") {
+				read_nmea(&connection,&msg,to_txt);
+			}
 			if (msg[fpos] == HEADER[fpos]) {
 				fpos++;
 			}
