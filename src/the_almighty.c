@@ -151,6 +151,10 @@ int main(int argc, char *argv[]){
 			}else if(strcmp(argv[i],"--reset")==0){
 				reset =true;
 			}else{
+				if(argc == i+1 || argv[i+1][0] == '-') {
+					printf("Error : No argument specified after %s.\n",argv[i]);
+					return 0;
+				}
 				sending_config=true;
 				memset(&field,0,sizeof(field));
 				if(get_field(argv[i],&field)){
