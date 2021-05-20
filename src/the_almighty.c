@@ -26,20 +26,20 @@ const char HEADER[2] = { 0xB5, 0x62 };
 
 void display_help() {
 	printf("\n==========   Help section for u-blox configuration :   ============\n\n");
-	printf("\t%-25sDisplay this help section.\n", "-h or --help");
-	printf("\t%-25sSpecify serial port. Default : ttyACM0.\n", "-p [port]");
-	printf("\t%-25sSpecify output filename. Default : output.txt\n", "-o [output filename]");
-	printf("\t%-25sIf output is enabled with -o, erases output file before printing.\n", "-e");
-	printf("\t%-25sSets the measuring time (unsigned long, in seconds)\n", "-t");
+	printf("\t%-30sDisplay this help section.\n", "-h or --help");
+	printf("\t%-30sSpecify serial port. Default : ttyACM0.\n", "-p PORT");
+	printf("\t%-30sSpecify output filename. Default : output.txt\n", "-o FILENAME");
+	printf("\t%-30sIf output is enabled with -o, erases output file before printing.\n", "-e");
+	printf("\t%-30sSets the measuring time (unsigned long, in seconds)\n", "-t");
 
 	for(int i=0; i<sizeof(CONFIG_DB)/sizeof(CONFIG_DB[0]);i++){
 		
 		char cmd[256+8];
-		char valuetype[13];
+		char valuetype[23];
 		strcpy(cmd,CONFIG_DB[i].cmd_line_arg);
-		sprintf(valuetype," [%s]",CONFIG_DB[i].var_type);
+		sprintf(valuetype," %s",CONFIG_DB[i].var_type);
 		strcat(cmd,valuetype);
-		printf("\t%-25s%s\n",cmd,CONFIG_DB[i].description);
+		printf("\t%-30s%s\n",cmd,CONFIG_DB[i].description);
 	}
 	fflush(stdout);
 }
@@ -169,7 +169,7 @@ int main(int argc, char *argv[]){
 		char final_config_msg[800];
 		int final_config_len;
 		wrap_config(&config_message[0], config_len, &final_config_msg[0], &final_config_len);
-		print_hex(final_config_msg,0,final_config_len);
+		//print_hex(final_config_msg,0,final_config_len);
 		//printf("%d",final_config_len);
 
 		int i = 0;

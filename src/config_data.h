@@ -34,25 +34,50 @@ void make_U2_message(const char* key,char*value, char* out_buff, int* out_len){
 		i++;
 
 	}
+	if(atoi(value)>256*256-1){
+		printf("Error, expected 2 byte integer as argument");
+		exit(EXIT_FAILURE);
+	}
 	memcpy(out_buff,key,4);
 	uint16_t dec_value=atoi(value);
 	array_reverse((char*)&dec_value,2);
 	memcpy(out_buff+4,&dec_value,2);
 	*out_len=6;
 }
+void make_U1_message(const char* key,char*value, char* out_buff, int* out_len){
+	int i=0;
+	while(i!=0){
 
-static const Config_field CONFIG_DB[8]={
-		{"--beidou","Bool", "BeiDou Enable", make_bool_message, {0x22,0x00,0x31,0x10}},
-		{"--qzss","Bool","Apply QZSS SLAS DGNSS corrections",make_bool_message,{0x05,0x00,0x37,0x10}},
-		{"--gps","Bool","GPS enable",make_bool_message, {0x1f,0x10,0x31,0x10}},
+		if(!isdigit(*(value+i))){
+			printf("Error, expected boolean value");
+			exit(EXIT_FAILURE);
+		}
+		i++;
+
+	}
+	if(atoi(value)>256-1){
+		printf("Error, expected 1 byte integer as argument");
+		exit(EXIT_FAILURE);
+	}
+	memcpy(out_buff,key,4);
+	*(out_buff+4)=atoi(value);
+	*out_len=5;
+}
+
+
+static const Config_field CONFIG_DB[9]={
+		{"--beidou","BOOL", "BeiDou Enable", make_bool_message, {0x22,0x00,0x31,0x10}},
+		{"--qzss","BOOL","Apply QZSS SLAS DGNSS corrections",make_bool_message,{0x05,0x00,0x37,0x10}},
+		{"--gps","BOOL","GPS enable",make_bool_message, {0x1f,0x10,0x31,0x10}},
 		
-		{"--rate_meas","Period in ms","Nominal time between GNSS measurements",make_U2_message,{0x01,0x00,0x21,0x30}},
-		{"--rate_nav","","Ratio of number of measurements to number of navigation solutions",make_U2_message,{0x02,0x00,0x21,0x30}},
+		{"--rate_meas","PERIOD","Nominal time between GNSS measurements (16bits) in ms",make_U2_message,{0x01,0x00,0x21,0x30}},
+		{"--rate_nav","RATIO","Ratio of number of measurements to number of navigation solutions (16bits)",make_U2_message,{0x02,0x00,0x21,0x30}},
 
-		{"--ubx","Bool", "Flag to indicate if UBX should be an output protocol on USB", make_bool_message, {0x01,0x00,0x78,0x10}},
-		{"--nmea","Bool", "Flag to indicate if NMEA should be an output protocol on USB", make_bool_message, {0x02,0x00,0x77,0x10}},
-		{"--rtmc","Bool","Flag to indicate if RTCM3X should be an output protocol on USB",make_bool_message,{0x04,0x00,0x78,0x10}}
-};
+		{"--ubx","BOOL", "Flag to indicate if UBX should be an output protocol on USB", make_bool_message, {0x01,0x00,0x78,0x10}},
+		{"--nmea","BOOL", "Flag to indicate if NMEA should be an output protocol on USB", make_bool_message, {0x02,0x00,0x77,0x10}},
+		{"--rtmc","BOOL","Flag to indicate if RTCM3X should be an output protocol on USB",make_bool_message,{0x04,0x00,0x78,0x10}},
+		{"--posllh","RATE","Output rate of the UBX-NAV-POSLLH message on port USB (8bits) in Hz",make_U1_message,{0x2c,0x00,0x91,0x20}}
+	};
 
 
 bool get_field(char* arg,Config_field* out_field){
