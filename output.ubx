@@ -1,83 +1,10 @@
-$GNTXT,01,01,02,u-blox AG - www.u-blox.com*4E
-$GNTXT,01,01,02,HW UBX-M80xx 00080000 *43
-$GNTXT,01,01,02,EXT CORE 2.01 (75350) Oct 29 2013 16:15:41*5C
-$GNTXT,01,01,02,ROM BASE 2.01 (75331) Oct 29 2013 13:28:17*44
-$GNTXT,01,01,02,PROTVER 15.00*01
-$GNTXT,01,01,02,GNSS OTP:  GPS GLO, SEL:  GPS GLO*67
-$GNTXT,01,01,02,ANTSUPERV=AC SD PDoS SR*3E
-$GNTXT,01,01,02,ANTSTATUS=OK*25
-$GNTXT,01,01,02,FIS 0xEF4015 (200042) found*17
-$GNTXT,01,01,02,LLC FFFFFFFF-FFFFFFED-FFFFFFFF-FFFFFFFF-FFFFFF69*3E
-$GNRMC,,V,,,,,,,,,,N*4D
-$GNVTG,,,,,,,,,N*2E
-$GNGGA,,,,,,0,00,99.99,,,,,,*56
-$GNGSA,A,1,,,,,,,,,,,,,99.99,99.99,99.99*2E
-$GNGSA,A,1,,,,,,,,,,,,,99.99,99.99,99.99*2E
-$GPGSV,1,1,00*79
-$GLGSV,1,1,01,,,,35*62
-$GNGLL,,,,,,V,N*7A
-$GNRMC,,V,,,,,,,,,,N*4D
-$GNVTG,,,,,,,,,N*2E
-$GNGGA,,,,,,0,00,99.99,,,,,,*56
-$GNGSA,A,1,,,,,,,,,,,,,99.99,99.99,99.99*2E
-$GNGSA,A,1,,,,,,,,,,,,,99.99,99.99,99.99*2E
-$GPGSV,1,1,00*79
-$GLGSV,1,1,01,,,,35*62
-$GNGLL,,,,,,V,N*7A
-$GNRMC,,V,,,,,,,,,,N*4D
-$GNVTG,,,,,,,,,N*2E
-$GNGGA,,,,,,0,00,99.99,,,,,,*56
-$GNGSA,A,1,,,,,,,,,,,,,99.99,99.99,99.99*2E
-$GNGSA,A,1,,,,,,,,,,,,,99.99,99.99,99.99*2E
-$GPGSV,1,1,00*79
-$GLGSV,1,1,01,,,,35*62
-$GNGLL,,,,,,V,N*7A
-$GNRMC,,V,,,,,,,,,,N*4D
-$GNVTG,,,,,,,,,N*2E
-$GNGGA,,,,,,0,00,99.99,,,,,,*56
-$GNGSA,A,1,,,,,,,,,,,,,99.99,99.99,99.99*2E
-$GNGSA,A,1,,,,,,,,,,,,,99.99,99.99,99.99*2E
-$GPGSV,1,1,00*79
-$GLGSV,1,1,01,,,,35*62
-$GNGLL,,,,,,V,N*7A
-$GNRMC,,V,,,,,,,,,,N*4D
-$GNVTG,,,,,,,,,N*2E
-$GNGGA,,,,,,0,00,99.99,,,,,,*56
-$GNGSA,A,1,,,,,,,,,,,,,99.99,99.99,99.99*2E
-$GNGSA,A,1,,,,,,,,,,,,,99.99,99.99,99.99*2E
-$GPGSV,1,1,00*79
-$GLGSV,1,1,01,,,,36*61
-$GNGLL,,,,,,V,N*7A
-$GNRMC,,V,,,,,,,,,,N*4D
-$GNVTG,,,,,,,,,N*2E
-$GNGGA,,,,,,0,00,99.99,,,,,,*56
-$GNGSA,A,1,,,,,,,,,,,,,99.99,99.99,99.99*2E
-$GNGSA,A,1,,,,,,,,,,,,,99.99,99.99,99.99*2E
-$GPGSV,1,1,00*79
-$GLGSV,1,1,01,,,,36*61
-$GNGLL,,,,,,V,N*7A
-$GNRMC,,V,,,,,,,,,,N*4D
-$GNVTG,,,,,,,,,N*2E
-$GNGGA,,,,,,0,00,99.99,,,,,,*56
-$GNGSA,A,1,,,,,,,,,,,,,99.99,99.99,99.99*2E
-$GNGSA,A,1,,,,,,,,,,,,,99.99,99.99,99.99*2E
-$GPGSV,1,1,00*79
-$GLGSV,1,1,01,,,,21*67
-$GNGLL,,,,,,V,N*7A
-$GNRMC,,V,,,,,,,,,,N*4D
-$GNVTG,,,,,,,,,N*2E
-$GNGGA,,,,,,0,00,99.99,,,,,,*56
-$GNGSA,A,1,,,,,,,,,,,,,99.99,99.99,99.99*2E
-$GNGSA,A,1,,,,,,,,,,,,,99.99,99.99,99.99*2E
-$GPGSV,1,1,00*79
-$GLGSV,1,1,01,,,,17*62
-$GNGLL,,,,,,V,N*7A
-$GNRMC,,V,,,,,,,,,,N*4D
-$GNVTG,,,,,,,,,N*2E
-$GNGGA,,,,,,0,00,99.99,,,,,,*56
-$GNGSA,A,1,,,,,,,,,,,,,99.99,99.99,99.99*2E
-$GNGSA,A,1,,,,,,,,,,,,,99.99,99.99,99.99*2E
-$GPGSV,1,1,00*79
-$GLGSV,1,1,01,,,,33*64
-$GNGLL,,,,,,V,N*7A
-$GNRMC,,V,,,,,,,,,,N*4D
+$GNTXT,01,01,00,txbuf alloc*61
+$GNTXT,01,01,$GNTXT,01,01,00,txbuf alloc*61
+$GNTXT,01,01,$GNTXT,01,01,00,txbuf alloc*61
+$GNTXT,01,01,$GNTXT,01,01,00,txbuf alloc*61
+$GNTXT,01,01,$GNTXT,01,01,00,txbuf alloc*61
+$GNTXT,01,01,$GNTXT,01,01,00,txbuf alloc*61
+$GNTXT,01,01$GNTXT,01,01,00,txbuf alloc*61
+$GNTXT,01,01$$GNTXT,01,01,00,txbuf alloc*61
+$GNTXT,01,01$$GNTXT,01,01,00,txbuf alloc*61
+$GNTXT,01,01$$GNTXT,01,01,00,txbuf alloc*61
