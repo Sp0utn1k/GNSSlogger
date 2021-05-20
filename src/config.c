@@ -26,6 +26,9 @@ const char CFG_cls = 0x06;
 
 
 bool check_ack(Connection* connection) {
+	/*
+	Reads messages until an ack or a nack is received
+	*/
 	const char HEADER[2] = { 0xB5, 0x62 };
 	bool ok = false;
 	bool is_ACK = false;
@@ -78,24 +81,9 @@ bool check_ack(Connection* connection) {
 	is_ACK = false;
 	return is_ACK;
 }
-/*
-int main(int argc, char *argv[])  {
 
-	
-	Connection connection = setup_connection(port);
-
-	//while (true) {
-		save_cfg(&connection);
-		
-		if(check_ack(&connection)) {
-				printf("ok\n");
-		}
-	//}
-	close_connection(connection);
-	return 1;
-}
-*/
 void wrap_config(char* inwards,int in_len,char* msg,int* msg_len){
+	// Builds a UBX-CFG-VALSET message from its payload (keys and values)
 	char header[4]={0xb5, 0x62, 0x06, 0x8a};
 	memcpy(msg,&header,4);
 	uint16_t field_len=4+in_len;
