@@ -19,22 +19,14 @@
 
 #include"connect.h"
 #include"utils.h"
-/*
-void save_cfg(Connection* connection) {
-	char msg[20];
-	memset(msg,0,sizeof(msg));
-	char header[] = {0xb5,0x62,0x06,0x09,0x0C,0x00};
-	int len = sizeof(header);
-	memcpy(&msg,&header,len);
-	for (int i=len+4;i<len+8;i++) {
-		msg[i] = 0xff;
-	}
 
-	compute_checksum(msg[], len, &msg[18], &msg[19]);
-	write_n_bytes(connection,msg,20);
-}
-*/
+const char ACK[2] = {0x05, 0x01};
+const char NAK[2] = {0x05, 0x00};
+const char CFG_cls = 0x06;
+
+
 bool check_ack(Connection* connection) {
+	const char HEADER[2] = { 0xB5, 0x62 };
 	bool ok = false;
 	bool is_ACK = false;
 	int fpos;

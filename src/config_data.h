@@ -2,9 +2,12 @@
 #include<stdlib.h>
 #include<string.h>
 #include<stdbool.h>
+#include <ctype.h>
+#include<stdint.h>
+#include"utils.h"
 typedef struct Config_field{
-	const char cmd_line_arg[10];
-	const char var_type[10];
+	const char cmd_line_arg[20];
+	const char var_type[20];
 	const char description[256];
 	const void (*make_message)(const char*,char*, char*, int*);
 	const char key[4];
@@ -21,21 +24,24 @@ void make_bool_message(const char* key,char* value, char* out_buff, int* out_len
 }
 
 void make_U2_message(const char* key,char*value, char* out_buff, int* out_len){
-	for(int i=0; i< out_len; i++){
-		if(!isdigit(*(value¨+i))){
+	int i=0;
+	while(i!=0){
+
+		if(!isdigit(*(value+i))){
 			printf("Error, expected boolean value");
 			exit(EXIT_FAILURE);
 		}
+		i++;
 
 	}
 	memcpy(out_buff,key,4);
 	uint16_t dec_value=atoi(value);
-	array_reverse(&dec_value,2);
+	array_reverse((char*)&dec_value,2);
 	memcpy(out_buff+4,&dec_value,2);
 	*out_len=6;
 }
 
-static const Config_field CONFIG_DB[3]={
+static const Config_field CONFIG_DB[8]={
 		{"--beidou","Bool", "BeiDou Enable", make_bool_message, {0x22,0x00,0x31,0x10}},
 		{"--qzss","Bool","Apply QZSS SLAS DGNSS corrections",make_bool_message,{0x05,0x00,0x37,0x10}},
 		{"--gps","Bool","GPS enable",make_bool_message, {0x1f,0x10,0x31,0x10}},
@@ -44,7 +50,7 @@ static const Config_field CONFIG_DB[3]={
 		{"--rate_nav","","Ratio of number of measurements to number of navigation solutions",make_U2_message,{0x02,0x00,0x21,0x30}},
 
 		{"--ubx","Bool", "Flag to indicate if UBX should be an output protocol on USB", make_bool_message, {0x01,0x00,0x78,0x10}},
-		{"--nmea","Bool", "Flag to indicate if NMEA should be an output protocol on USB", make_bool_message, {0x02,0x00,0x78,0x10}},
+		{"--nmea","Bool", "Flag to indicate if NMEA should be an output protocol on USB", make_bool_message, {0x02,0x00,0x77,0x10}},
 		{"--rtmc","Bool","Flag to indicate if RTCM3X should be an output protocol on USB",make_bool_message,{0x04,0x00,0x78,0x10}}
 };
 

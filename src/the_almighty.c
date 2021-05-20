@@ -22,6 +22,7 @@
 #include"connect.h"
 #include"config.h"
 #include"config_data.h"
+const char HEADER[2] = { 0xB5, 0x62 };
 
 void display_help() {
 	printf("\n==========   Help section for u-blox configuration :   ============\n\n");
@@ -168,7 +169,7 @@ int main(int argc, char *argv[]){
 		char final_config_msg[800];
 		int final_config_len;
 		wrap_config(&config_message[0], config_len, &final_config_msg[0], &final_config_len);
-		//print_hex(final_config_msg,0,final_config_len);
+		print_hex(final_config_msg,0,final_config_len);
 		//printf("%d",final_config_len);
 
 		int i = 0;
