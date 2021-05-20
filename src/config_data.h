@@ -94,18 +94,3 @@ bool get_field(char* arg,Config_field* out_field){
 	return 0;
 }
 
-
-/*
-
-struct Config_db{
-	Config_field fields[10];
-};
-
-static const struct Config_db CONFIG_DB={
-	.fields={
-		{"bd","Use BeiDou geostationary satellites (PRN 1-5)",make_bool_message,{0x10,0x34,0x00,0x14}},
-		{"ubx","Information message enable flags for the UBX protocol",make_bool_message,{0x20,0x92,0x00,0x04}},
-		{"nmea","Information message enable flags for the NMEA protocol",make_bool_message,{0x20,0x92,0x00,0x09}}
-	}
-};
-*/

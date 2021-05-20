@@ -35,6 +35,7 @@ void display_help() {
 	printf("\t%-30sSpecify output filename. Default : output.txt\n", "-o FILENAME");
 	printf("\t%-30sIf output is enabled with -o, erases output file before printing.\n", "-e");
 	printf("\t%-30sSets the measuring time (unsigned long, in seconds)\n", "-t");
+	printf("\t%-30sSends a software reset message to the receiver\n","--reset");
 
 	for(int i=0; i<sizeof(CONFIG_DB)/sizeof(CONFIG_DB[0]);i++){
 		
