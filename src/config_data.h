@@ -65,7 +65,7 @@ void make_U1_message(const char* key,char*value, char* out_buff, int* out_len){
 }
 
 
-static const Config_field CONFIG_DB[10]={
+static const Config_field CONFIG_DB[11]={
 		{"--beidou","BOOL", "BeiDou Enable", make_bool_message, {0x22,0x00,0x31,0x10}},
 		{"--qzss","BOOL","Apply QZSS SLAS DGNSS corrections",make_bool_message,{0x05,0x00,0x37,0x10}},
 		{"--gps","BOOL","GPS enable",make_bool_message, {0x1f,0x10,0x31,0x10}},
@@ -77,7 +77,8 @@ static const Config_field CONFIG_DB[10]={
 		{"--ubx","BOOL", "Flag to indicate if UBX should be an output protocol on USB", make_bool_message, {0x01,0x00,0x78,0x10}},
 		{"--nmea","BOOL", "Flag to indicate if NMEA should be an output protocol on USB", make_bool_message, {0x02,0x00,0x77,0x10}},
 		{"--rtmc","BOOL","Flag to indicate if RTCM3X should be an output protocol on USB",make_bool_message,{0x04,0x00,0x78,0x10}},
-		{"--posllh","RATE","Output rate of the UBX-NAV-POSLLH message on port USB (8bits) in Hz",make_U1_message,{0x2c,0x00,0x91,0x20}}
+		{"--posllh","RATE","Output rate of the UBX-NAV-POSLLH message on port USB (8bits) in Hz",make_U1_message,{0x2c,0x00,0x91,0x20}},
+		{"--nDTM","RATE","Output rate of the NMEA-GX-DTM message on port USB (8bits) in Hz",make_U1_message,{0xa9,0x00,0x91,0x20}}
 	};
 
 
