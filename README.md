@@ -5,7 +5,7 @@ Then run ./GNSSLogger. A help section will be printed if no argument is provided
 
 
 ## Serial port 
-It is almost necessary to provide the correct serial port in which the u-blox is plugged. In typical UNIX style, serial ports are represented by files within the operating system. These files usually pop-up in /dev/, and begin with the name tty*. 
+It is almost necessary to provide the correct serial port in which the u-blox is plugged. In typical UNIX style, serial ports are represented by files within the operating system. These files usually pop-up in /dev/, and begin with the name tty*. You can check by running ls /dev.
 
 Common names are:
 
