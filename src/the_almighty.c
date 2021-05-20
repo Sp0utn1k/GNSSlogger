@@ -32,7 +32,7 @@ void display_help() {
 	printf("\n==========   Help section for u-blox configuration :   ============\n\n");
 	printf("\t%-30sDisplay this help section.\n", "-h or --help");
 	printf("\t%-30sSpecify serial port. Default : ttyACM0.\n", "-p PORT");
-	printf("\t%-30sSpecify output filename. Default : output.txt\n", "-o FILENAME");
+	printf("\t%-30sSpecify output filename. Default : output.ubx\n", "-o FILENAME");
 	printf("\t%-30sIf output is enabled with -o, erases output file before printing.\n", "-e");
 	printf("\t%-30sSets the measuring time (unsigned long, in seconds)\n", "-t");
 	printf("\t%-30sSends a software reset message to the receiver\n","--reset");
