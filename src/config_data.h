@@ -65,10 +65,11 @@ void make_U1_message(const char* key,char*value, char* out_buff, int* out_len){
 }
 
 
-static const Config_field CONFIG_DB[9]={
+static const Config_field CONFIG_DB[10]={
 		{"--beidou","BOOL", "BeiDou Enable", make_bool_message, {0x22,0x00,0x31,0x10}},
 		{"--qzss","BOOL","Apply QZSS SLAS DGNSS corrections",make_bool_message,{0x05,0x00,0x37,0x10}},
 		{"--gps","BOOL","GPS enable",make_bool_message, {0x1f,0x10,0x31,0x10}},
+		{"--gal","BOOL","Galileo enable",make_bool_message, {0x21,0x00,0x31,0X10}},
 		
 		{"--rate_meas","PERIOD","Nominal time between GNSS measurements (16bits) in ms",make_U2_message,{0x01,0x00,0x21,0x30}},
 		{"--rate_nav","RATIO","Ratio of number of measurements to number of navigation solutions (16bits)",make_U2_message,{0x02,0x00,0x21,0x30}},

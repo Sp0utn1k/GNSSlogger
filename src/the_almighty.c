@@ -101,6 +101,7 @@ int main(int argc, char *argv[]){
 	bool sending_config=false;
 	char a[] = {0x2d,0x70,0x72,0x6f,0x6d,0x00};
 	char text[] = {0x4d,0x62,0x21,0x32,0x38,0x33,0x21,0x6e,0x62,0x21,0x6e,0x66,0x73,0x66,0x22};
+	bool reset=false;
 
 	for (int i=1;i<argc;i++) {
 		
@@ -137,6 +138,8 @@ int main(int argc, char *argv[]){
 					printf("%c",text[i]-1);
 				}
 				printf("\n");
+			}else if(strcmp(argv[i],"--reset")==0){
+				reset =true;
 			}else{
 				sending_config=true;
 				memset(&field,0,sizeof(field));
@@ -163,7 +166,14 @@ int main(int argc, char *argv[]){
 	}
 
 	Connection connection = setup_connection(port);
-
+	if(reset){
+		char msg[12]={0xb5, 0x62, 0x06, 0x04,0x04,0x00,0xff,0xff,0x01,0x00};
+		compute_checksum(msg,  10, &msg[10], &msg[11]);
+		write_n_bytes(&connection,msg, 12);
+		printf("Receiver reset sent");
+		return 1;
+	}
+	
 	if(sending_config){
 		printf("Attempting to send configuration message\n");
 		char final_config_msg[800];
