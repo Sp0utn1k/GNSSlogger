@@ -64,6 +64,8 @@ bool check_ack(Connection* connection) {
 			read_n_bytes(connection,&buf[3],1);
 			if (buf[3]==ACK[1]) {
 				is_ACK = true;
+			}else if (buf[3]==NAK[1]) {
+				printf("NAK received");
 			}
 
 			read_n_bytes(connection,&buf[4],6);

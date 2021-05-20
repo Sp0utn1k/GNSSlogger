@@ -180,7 +180,7 @@ int main(int argc, char *argv[]){
 		char msg[12]={0xb5, 0x62, 0x06, 0x04,0x04,0x00,0xff,0xff,0x01,0x00};
 		compute_checksum(msg,  10, &msg[10], &msg[11]);
 		write_n_bytes(&connection,msg, 12);
-		printf("Receiver reset sent");
+		printf("Receiver reset sent\n");
 		return 1;
 	}
 	
