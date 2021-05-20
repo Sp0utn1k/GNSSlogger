@@ -205,6 +205,7 @@ int main(int argc, char *argv[]){
 		printf("Config message sent correctly\n");
 
 	}
+
 	// sets up the output file
 	FILE * fp;
 	if (to_txt) {
