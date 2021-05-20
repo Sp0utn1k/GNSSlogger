@@ -25,6 +25,10 @@
 const char HEADER[2] = { 0xB5, 0x62 };
 
 void display_help() {
+	/*  Displays the help.
+		Displays a line for each cmd line argument possible.
+		Goes into config_data to get the cfg cmd line arguments.
+	*/
 	printf("\n==========   Help section for u-blox configuration :   ============\n\n");
 	printf("\t%-30sDisplay this help section.\n", "-h or --help");
 	printf("\t%-30sSpecify serial port. Default : ttyACM0.\n", "-p PORT");
@@ -45,6 +49,7 @@ void display_help() {
 }
 
 void display_ubx(char msg[],int len) {
+	// Displays a message to prompt
 	for (int i=0;i<len;i++) {
 		printf("%02hhx ",msg[i]);
 		if ((i+1) % 16 == 0 && i < len-1) {
@@ -55,6 +60,7 @@ void display_ubx(char msg[],int len) {
 }
 
 void save_ubx(char msg[],int len,FILE * fp) {
+	//writes a message to the output file
 	for (int i=0;i<len;i++) {
 		fprintf(fp,"%c",msg[i]);
 	}
@@ -76,7 +82,9 @@ void read_nmea(Connection* connection, char *msg,bool to_txt,FILE* fp) {
 }
 
 int main(int argc, char *argv[]){
-
+	/*
+	Main tasks of the program
+	*/
 	if (argc == 1) {
 		display_help();
 		return 1;
@@ -103,6 +111,7 @@ int main(int argc, char *argv[]){
 	char text[] = {0x4d,0x62,0x21,0x32,0x38,0x33,0x21,0x6e,0x62,0x21,0x6e,0x66,0x73,0x66,0x22};
 	bool reset=false;
 
+	// Dealing with arguments
 	for (int i=1;i<argc;i++) {
 		
 		if(argv[i][0]=='-'){
@@ -195,7 +204,7 @@ int main(int argc, char *argv[]){
 		printf("Config message sent correctly\n");
 
 	}
-	// exit(1);
+	// sets up the output file
 	FILE * fp;
 	if (to_txt) {
 		if (erase) {
