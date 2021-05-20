@@ -227,6 +227,7 @@ int main(int argc, char *argv[]){
 	int progression =  0;
 	while (time(NULL)-time_buf < measure_time) {
 
+		fpos = 0;
 		if (to_txt) {
 			progression = 100 - 100*(measure_time-(int)(time(NULL)-time_buf))/measure_time;
 			printf("\rProgression : %d%%",progression);
@@ -242,8 +243,11 @@ int main(int argc, char *argv[]){
 				fpos++;
 			}
 			else {
-				fpos = 0;
+				fpos = 172;
 			}
+		}
+		if (fpos == 172) {
+			continue;
 		}
 		read_n_bytes(&connection,&msg[2],4);
 		len = (unsigned short) msg[4];
